@@ -49,15 +49,18 @@
 
     $ref = $lst[0];
     $cmd = array();
-    $cmd[] = sprintf("cd %s;\n", $DEF_PARAM['CE_DIR']);
+    
+    $ce_dir = getRealPath($DEF_PARAM['CE_DIR']);
+    $cmd[] = sprintf("cd %s;\n", $ce_dir);
     $cmd[] = sprintf('echo "# start CE alignment";');
     $num = count($lst);
 
     foreach($lst as $i => $tar)
     {
-        $c = sprintf(   "echo -ne \"# [%2d/%2d] %s %s to %s %s\r\";./CErun - %s %s %s %s scratch > %s/%s-%s.cemat\n"
+        $c = sprintf(   "echo -ne \"# [%2d/%2d] %s %s to %s %s\r\";%s/%s - %s %s %s %s scratch > %s/%s-%s.cemat\n"
                         , $i+1, $num
                         , $tar['id'], $tar['ch'], $ref['id'], $ref['ch']
+                        , $ce_dir, $DEF_PARAM['CE_PROG']
                         , $ref['fn'], $ref['ch'] 
                         , $tar['fn'], $tar['ch'] 
                         , $DIR_OUT, $tar['id'], $ref['id']
