@@ -1,5 +1,5 @@
-PDB files from CE structual alignment result
-============================================
+PDB files from CE structual alignment results
+=============================================
 
 ##Steps
 
