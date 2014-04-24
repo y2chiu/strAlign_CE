@@ -108,6 +108,7 @@
             //$name_ch  = empty($name_ch) ? 'A' : $name_ch;
             $num_atm  = substr($line,  6, 5);
             $num_res  = substr($line, 22, 4);
+            $altloc   = $line[16];
             $icode    = $line[26]; 
             
             $isHET   = $record[0] == 'H' ? true : false;
@@ -148,7 +149,7 @@
                             , $record
                             , ($RESORTSEQNUM) ? $count_atm : $num_atm
                             , $name_atm
-                            , ' '
+                            , $altloc
                             , $name_res
                             , $name_ch
                             , ($RESORTSEQNUM) ? $count_res : $num_res
