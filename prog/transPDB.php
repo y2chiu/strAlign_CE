@@ -103,7 +103,7 @@
                 continue;
 
             $name_res = substr($line, 17, 3);
-            $name_atm = substr($line, 13, 3);
+            $name_atm = substr($line, 12, 4);
             $name_ch  = trim($line[21]);
             //$name_ch  = empty($name_ch) ? 'A' : $name_ch;
             $num_atm  = substr($line,  6, 5);
@@ -144,10 +144,11 @@
 
             list($x,$y,$z) = array($tr_x, $tr_y, $tr_z);
 
-            $out = sprintf( "%s%5d  %-4s%3s %s%4d%s   %8.3f%8.3f%8.3f%6.2f%6.2f\n"
+            $out = sprintf( "%s%5d %-4s%s%3s %s%4d%s   %8.3f%8.3f%8.3f%6.2f%6.2f\n"
                             , $record
                             , ($RESORTSEQNUM) ? $count_atm : $num_atm
                             , $name_atm
+                            , ' '
                             , $name_res
                             , $name_ch
                             , ($RESORTSEQNUM) ? $count_res : $num_res
