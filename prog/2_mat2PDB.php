@@ -3,11 +3,11 @@
     include($DIR_PROG.'/libcom.php');
     ini_set('memory_limit', '2048M');
 
-    $opt= getOption('l:', array('di:','do:','dm:'));
+    $opt= getOption('l:', array('di:','do:','dm:','wp'));
     foreach(array('l','dm','di','do') as $k)
     {
         if(!isset($opt[$k]))
-            die(sprintf("\n !! %s -l LIST_PDB --dm DIR_OUT_MATRIX --di DIR_IN_PDB --do DIR_OUT_PDB\n\n", $argv[0]));
+            die(sprintf("\n !! %s -l LIST_PDB --dm DIR_OUT_MATRIX --di DIR_IN_PDB --do DIR_OUT_PDB [--wp]\n\n", $argv[0]));
     }
 
     $DEF_PARAM = parse_ini_file(sprintf('%s/0_param.ini', $DIR_PROG));
@@ -16,6 +16,8 @@
     $DIR_MAT = getRealPath($opt['dm']);
     $DIR_IN  = createPath($opt['di']);
     $DIR_OUT = createPath($opt['do']);
+    
+    $WHOLE_PDB = isset($opt['wp']) ? true : false;
 
     // INPUT FORMAT
     // using first line as reference
@@ -65,11 +67,12 @@
             );
             continue;
         }
-    
-        $c = sprintf(   "echo -ne \"# [%2d/%2d] %s %s\r\";php %s/3_getPDB.php -m %s -i %s -o %s.pdb -c %s --do %s\n"
+   
+        $c = sprintf(   "echo -ne \"# [%2d/%2d] %s %-20s\r\";php %s/3_getPDB.php -m %s -i %s -o %s.pdb -c %s --do %s\n"
                         , $i+1, $num
-                        , $tar['id'], $tar['ch']
-                        , $DIR_PROG, $mfn, $tar['fn'], $tar['id'], $tar['ch'], $DIR_OUT
+                        , $tar['id'], ($WHOLE_PDB) ? '_' : $tar['ch']
+                        , $DIR_PROG, $mfn, $tar['fn'], $tar['id']
+                        , ($WHOLE_PDB) ? '_' : $tar['ch'], $DIR_OUT
         );
         $cmd[] = $c;
     }

@@ -62,6 +62,16 @@
                 $result['type'] = 'NMR';
                 break;
             }
+            
+            else if(strncmp($record, 'HET   ', 6) == 0)
+            {
+                $name_ch = substr($line, 12, 1); 
+                if($setSelectCH && !in_array($name_ch, $select_ch))	continue;
+                
+                $out = $line."\n";
+                $result['str'][] = $out;
+            }
+
 
             else if(strncmp($record, 'TER', 3) == 0)
             {
