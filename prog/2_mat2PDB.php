@@ -3,7 +3,7 @@
     include($DIR_PROG.'/libcom.php');
     ini_set('memory_limit', '2048M');
 
-    $opt= getOption('l:', array('di:','do:','dm:','wp'));
+    $opt= getOption('l:x', array('di:','do:','dm:','wp','cmd'));
     foreach(array('l','dm','di','do') as $k)
     {
         if(!isset($opt[$k]))
@@ -18,6 +18,7 @@
     $DIR_OUT = createPath($opt['do']);
     
     $WHOLE_PDB = isset($opt['wp']) ? true : false;
+    $SHOW_CMD = (isset($opt['x']) || isset($opt['cmd'])) ? true : false;
 
     // INPUT FORMAT
     // using first line as reference
@@ -53,7 +54,7 @@
     $ref = $lst[0];
     $cmd = array();
     $cmd[] = sprintf("cd %s;\n", $DEF_PARAM['CE_DIR']);
-    $cmd[] = sprintf('echo "# start to translate PDB files";');
+    $cmd[] = sprintf('echo "# start to translate PDB files";'."\n");
     $num = count($lst);
 
     foreach($lst as $i => $tar)
@@ -68,7 +69,7 @@
             continue;
         }
    
-        $c = sprintf(   "echo -ne \"# [%2d/%2d] %s %-20s\r\";php %s/3_getPDB.php -m %s -i %s -o %s.pdb -c %s --do %s\n"
+        $c = sprintf(   "echo -ne \"# [%2d/%2d] %s %-20s\r\";php %s/3_getPDB.php -m %s -i %s -o %s.pdb -c %s --do %s;\n"
                         , $i+1, $num
                         , $tar['id'], ($WHOLE_PDB) ? '_' : $tar['ch']
                         , $DIR_PROG, $mfn, $tar['fn'], $tar['id']
@@ -76,10 +77,19 @@
         );
         $cmd[] = $c;
     }
-    $cmd[] = sprintf('echo "# done";');
+    $cmd[] = sprintf('echo -e "\n# done";'."\n");
 
-    foreach($cmd as $c)
-        echo $c;
+    if($SHOW_CMD)
+    {
+        echo join('',$cmd);
+    }
+    else
+    {
+        $fout = '.run.script';
+        file_put_contents($fout,$cmd);
+        //system("sh $fout"); // it cant show all raw outputs
+        passthru("sh $fout"); 
+    }
 
     exit;
 

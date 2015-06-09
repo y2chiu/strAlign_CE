@@ -3,7 +3,7 @@
     include($DIR_PROG.'/libcom.php');
     ini_set('memory_limit', '2048M');
 
-    $opt= getOption('l:', array('di:','do:'));
+    $opt= getOption('l:x', array('di:','do:','cmd'));
     foreach(array('l','di','do') as $k)
     {
         if(!isset($opt[$k]))
@@ -15,6 +15,7 @@
     $FN_LIST = getRealPath($opt['l']);
     $DIR_IN  = createPath($opt['di']);
     $DIR_OUT = createPath($opt['do']);
+    $SHOW_CMD = (isset($opt['x']) || isset($opt['cmd'])) ? true : false;
 
     // INPUT FORMAT
     // using first line as reference
@@ -52,12 +53,12 @@
     
     $ce_dir = getRealPath($DEF_PARAM['CE_DIR']);
     $cmd[] = sprintf("cd %s;\n", $ce_dir);
-    $cmd[] = sprintf('echo "# start CE alignment";');
+    $cmd[] = sprintf('echo "# start CE alignment";'."\n");
     $num = count($lst);
 
     foreach($lst as $i => $tar)
     {
-        $c = sprintf(   "echo -ne \"# [%2d/%2d] %s %s to %s %s\r\";%s/%s - %s %s %s %s scratch > %s/%s-%s.cemat\n"
+        $c = sprintf(   "echo -ne \"# [%2d/%2d] %s %s to %s %s\r\";\n%s/%s - %s %s %s %s scratch > %s/%s-%s.cemat;\n"
                         , $i+1, $num
                         , $tar['id'], $tar['ch'], $ref['id'], $ref['ch']
                         , $ce_dir, $DEF_PARAM['CE_PROG']
@@ -68,11 +69,20 @@
         $cmd[] = $c;
     }
 
-    $cmd[] = sprintf('echo "# finish CE alignment";');
+    $cmd[] = sprintf('echo -e "\n# finish CE alignment";'."\n");
     $cmd[] = sprintf("cd -;\n");
 
-    foreach($cmd as $c)
-        echo $c;
+    if($SHOW_CMD)
+    {
+        echo join('',$cmd);
+    }
+    else
+    {
+        $fout = '.run.script';
+        file_put_contents($fout,$cmd);
+        //system("sh $fout"); // it cant show all raw outputs
+        passthru("sh $fout"); 
+    }
 
     exit;
 
