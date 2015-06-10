@@ -15,21 +15,48 @@ PDB files from CE structual alignment results
 3. Create list file including ID, CHAIN, FILE_NAME
   > INPUT FORMAT  
   > using first line as reference  
-  > for example, 3h9r chain A will be aligned to 2jdr chain A  
+  > for example, 2NRY chain A will be aligned to 2NRU chain A and output name is 2nry_A
   >
-  >ID     CHAIN   FILE_NAME  
-  >2jdr_A  A       30_kinase_cav/AKT2_AGC_2jdr_A.pdb  
-  >3h9r_A  A       30_kinase_cav/ACVR1_TKL_3h9r_A.pdb  
+  >ID      CHAIN   FILE_NAME 
+  >2nru_A  A       2nru.pdb
+  >2nry_A  A       2nry.pdb
+  >2o8y_A  A       2o8y.pdb
 
 4. Run CE COMMAND
   ```
-  php prog/1_runCE.php -l example/list.32_kinase_cav.txt --di example/32_kinase_cav/ --do example/32_kinase_cemat > todo1.sh
-  sh todo1.sh
-  php prog/2_mat2PDB.php -l example/list.32_kinase_cav.txt --dm example/32_kinase_cemat/ --di example/32_kinase_cav/ --do example/32_kinase_trpdb > todo2.sh
-  sh todo2.sh
+  # Run CE
+  #prog/1_runCE.php -l LIST_PDB --di DIR_INPUT_PDB --do DIR_CE_OUT
+  #
+  #Parameters
+  #-l   [input list of PDB files you want to align]
+  #--di [directory of you prepared PDB files]
+  #--do [directory of CE output results]
+
+  #Command
+  php prog/1_runCE.php -l example/list.IRAK4.13str.txt --di example/IRAK4/ --do example/IRAK4_ceout
+
+  # Generate aligned PDBs
+  #prog/2_mat2PDB.php -l LIST_PDB --dm DIR_CE_OUT --di DIR_INPUT_PDB ­do DIR_ALIGN_PDB 
+  #
+  #Parameters
+  #-l   [input list of PDB files you want to align]
+  #--dm [directory of CE output results]
+  #--di [directory of you prepared PDB files]
+  #--do [directory of new aligned PDB files]
+
+  #Command
+  php prog/2_mat2PDB.php -l example/list.IRAK4.13str.txt --dm example/IRAK4_ceout/ --di example/IRAK4 --do example/IRAK4_trpdb
   ```
 
 5. GET RMSD
   ```
-  php prog/4_getRMSD.php -l example/list.32_kinase_cav.txt --dm example/32_kinase_cemat/
+  #Calculate RMSDs
+  #prog/4_getRMSD.php -l LIST_PDB --dm DIR_CE_OUT
+  #
+  #Parameters
+  #-l   [input list of PDB files you want to align]
+  #--dm [directory of CE output results]
+
+  #Command
+  php prog/4_getRMSD.php -l example/list.IRAK4.13str.txt --dm example/IRAK4_ceout/
   ```

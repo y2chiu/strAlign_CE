@@ -81,10 +81,17 @@
         $result[] = $d;
     }
 
+    usort($result, 'cmp');
+
     echo join("\t", array('#TARGET','TAR_CHAIN','TAR_LENGTH','REFERENCE','REF_CHAIN','REF_LENGTH', 'Aligned_Length','RMSD','ZScore','Gap')), "\n";
     foreach($result as $d)
         echo join("\t", $d), "\n";
 
     exit;
+
+    function cmp($a, $b)
+    {
+        return $a[7] > $b[7];
+    }
 
 ?>

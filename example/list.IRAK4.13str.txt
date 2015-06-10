@@ -1,0 +1,14 @@
+#ID	CHAIN	FILE_NAME
+2nru_A	A	2nru.pdb
+2nry_A	A	2nry.pdb
+2o8y_A	A	2o8y.pdb
+2oib_A	A	2oib.pdb
+2oic_A	A	2oic.pdb
+2oid_A	A	2oid.pdb
+3mop_A	A	3mop.pdb
+4u97_A	A	4u97.pdb
+4u9a_A	A	4u9a.pdb
+4xs2_A	A	4xs2.pdb
+4y73_A	A	4y73.pdb
+4yo6_A	A	4yo6.pdb
+4yp8_A	A	4yp8.pdb
